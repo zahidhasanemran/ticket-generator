@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <div class="container">
+        <div class="form" style="padding-top: 50px">
+            <a href="" id="randm">Random</a>
+            <a href="" id="clr">Clear</a>
+            <div class="form_wrapper">
+                <p class="pos">0</p>
+                <p class="pos">1</p>
+                <p class="pos">2</p>
+                <p class="pos ocupaid">3</p>
+                <p class="pos">4</p>
+                <p class="pos">5</p>
+                <p class="pos ocupaid">6</p>
+                <p class="pos">7</p>
+                <p class="pos ocupaid">8</p>
+            </div>
+            <a href="" class="apply">Apply</a>
+        </div>
+
+        <table style="width:100%" class="table">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>lucky number</th>
+                    <th>Age</th>
+                    <td>Action</td>
+                  </tr>
+            </thead>
+            
+            <tbody class="tbody">
+                
+            </tbody>
+            
+          </table>
+
+    </div>
+
+
+    <script>
+        const btn = document.querySelector(".apply");
+        const items = document.getElementsByClassName("pos");
+        const container = document.querySelector(".container");
+        const table = document.querySelector(".tbody");
+        const ranBtn = document.getElementById("randm");
+        const clr = document.getElementById("clr");
+        let allValues = [];
+        let value = [];
+        
+        
+        
+        // value storing in a array 
+        container.addEventListener("click", function (e) {
+            if(e.target.classList.length>0 && e.target.hasAttribute("href") === false){
+                if(value.length < 4){
+                    e.target.classList.add("ocupaid");
+                }else{
+                    alert("your already select 4 items");
+                }
+                
+                for (let i = 0; i < items.length; i++) {
+                    
+                    if(items[i].classList.length > 1){
+                        let item = parseInt(items[i].textContent);
+                        value.push(item);
+                        value = [...new Set(value)] 
+                        
+                    }   
+                }
+            }      
+        })
+
+        // clear when clicked in clear button 
+        clr.addEventListener("click", function(e){
+            e.preventDefault();
+            clearAll();
+            value = [];
+        });
+
+
+        // data length check and insert into table
+        btn.addEventListener("click", function(e){
+            e.preventDefault();
+            
+            newStringVal = JSON.stringify(value);
+
+            if(value.length != 4){
+                alert("please select one more");
+            }else{
+                let lent =  table.children.length ? table.children.length : 0;
+                table.innerHTML += `
+                <tr class="item" id="tableItem_${lent}" data-tickets="${newStringVal}">
+                    <td>5555555555555</td>
+                    <td> <span>${value[0]}</span> <span>${value[1]}</span> <span>${value[2]}</span> <span>${value[3]}</span> </td>
+                    <td>50</td>
+                    <td><button onClick="deletetable(${lent})">Delete</button></td>
+                </tr>
+                
+                `;
+                value = [];
+                clearAll();
+                
+            }
+        });
+
+        // clear after insert data into table 
+        function clearAll() {
+            for (let i = 0; i < items.length; i++) {
+                if(items[i].classList.length > 1){
+                    items[i].classList.remove("ocupaid")
+                    
+                }
+                
+            }
+        }
+
+        // delete table data
+        function deletetable(idn) {
+            document.getElementById(`tableItem_${idn}`).remove();
+        }
+
+        // generate random 4 numbers 
+        function randomNumber(retValue, loopNum) {
+            let num = [];
+            
+            do {
+                let o = Math.floor(Math.random() * items.length);
+                if(num.includes(o) !== true){
+                    num.push(o);
+                }
+            } while (num.length < retValue);
+
+            return num;
+            
+            
+        }
+        
+
+
+        ranBtn.addEventListener("click", function(e){
+            e.preventDefault();
+            clearAll();
+            let num = randomNumber(4, items.length);
+            value = [...num];
+            
+            value.forEach(vty => {
+                items[vty].classList.add("ocupaid");
+            });
+
+        });
+
+        
+
+
+    </script>
+</body>
+</html>
